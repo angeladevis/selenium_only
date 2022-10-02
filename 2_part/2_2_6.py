@@ -1,14 +1,14 @@
 '''
 # Тут расположено решение тестового задания по курсу 
 # "Автоматизация тестирования с помощью Selenium и Python"
-# Модуль 2, раздел 1, 5 степ
+# Модуль 2, раздел 2, 6 степ (2_1_5)
 '''
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-import math
+import math, time
 
 # переход на нужную страницу
-link = "http://suninjuly.github.io/math.html"
+link = "http://SunInJuly.github.io/execute_script.html"
 browser = webdriver.Chrome()
 browser.get(link)
 
@@ -16,18 +16,21 @@ browser.get(link)
 def calc(x):
 	return str( math.log( abs( 12 * math.sin( int(x) ) ) ) )
 
-# находим нужный элемент /значение x для выполнения задания
+# находим значение x для выполнения задания
 x_in_first_test = browser.find_element(By.ID, "input_value")
-# у этого элемента считываем значение между тегами и присваеваем это значение в переменную
 x_value = x_in_first_test.text
 
-# подставляем в функцию это значение переменной
+# высчитываем результат для первого задания
 first_test_result = calc(x_value)
 
-# находим элемент отвечающий за поле ввода \вводим ответ к первому тесту
+# вводим ответ к первому тесту
 first_test_input = browser.find_element(By.ID, "answer")
-# этому элементу сообщаем значение функции из переменной
 first_test_input.send_keys(first_test_result)
+
+#scroll \добавляем 2 строки к 2_1_5
+browser.execute_script("window.scrollBy(0, 100);") #Эта команда проскроллит страницу на 100 пикселей вниз
+# button = browser.find_element(By.TAG_NAME, "button") #2-й вариант, в 2 строки уже
+# browser.execute_script("return arguments[0].scrollIntoView(true);", button) #и эту дичь добавляем для скролла
 
 # выбираем checkbox
 robot_checkbox = browser.find_element(By.ID, "robotCheckbox")
@@ -38,5 +41,10 @@ robot_radiobutton = browser.find_element(By.ID, "robotsRule")
 robot_radiobutton.click()
 
 # нажимаем кнопку отправить
-send_button = browser.find_element(By.CLASS_NAME, "btn-default")
+send_button = browser.find_element(By.CLASS_NAME, "btn-primary")
 send_button.click()
+
+time.sleep(5)
+
+# После выполнения всех действий мы должны не забыть закрыть окно браузера
+browser.quit()
